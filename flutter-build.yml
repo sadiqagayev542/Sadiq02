@@ -1,0 +1,34 @@
+name: Build Flutter APK
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repository-ni klonla
+        uses: actions/checkout@v3
+
+      - name: Flutter-ı quraşdır
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.13.0" # Buraya öz Flutter versiyanı yaz
+
+      - name: Flutter bağımlıqlarını yüklə
+        run: flutter pub get
+
+      - name: APK yarat
+        run: flutter build apk --release
+
+      - name: APK faylını saxla
+        uses: actions/upload-artifact@v3
+        with:
+          name: apk
+          path: build/app/outputs/flutter-apk/app-release.apk
